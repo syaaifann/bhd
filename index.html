@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Umi Aulia Farida ke-15</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Pacifico untuk tampilan lucu -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pastel-pink': '#FFD1DC',
+                        'pastel-purple': '#E6E6FA',
+                        'pastel-yellow': '#FDFD96',
+                        'deep-pink': '#FF69B4',
+                    },
+                    fontFamily: {
+                        'cute': ['Fredoka', 'sans-serif'],
+                        'script': ['Pacifico', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'flicker': 'flicker 0.1s infinite alternate',
+                        'spin-slow': 'spin 4s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        flicker: {
+                            '0%': { transform: 'scale(1)', opacity: '1' },
+                            '100%': { transform: 'scale(1.1)', opacity: '0.8' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #e6e6fa 100%);
+            overflow-x: hidden;
+        }
+
+        /* Hide scrollbar for clean look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #ffb7b2; border-radius: 10px; }
+
+        /* Candle Styles */
+        .cake { position: relative; width: 250px; height: 200px; margin: 0 auto; }
+        .plate { width: 270px; height: 110px; position: absolute; bottom: -10px; left: -10px; background-color: #ccc; border-radius: 50%; box-shadow: 0 2px 0 #b3b3b3, 0 4px 0 #b3b3b3, 0 5px 40px rgba(0,0,0,0.1); }
+        .cake-body { position: absolute; width: 250px; height: 150px; background-color: #ff9ecd; bottom: 0; border-radius: 20px 20px 0 0; box-shadow: inset 0 -15px #f98ebd, inset 0 15px #ffcce6; }
+        .frosting { position: absolute; top: 0; left: 0; width: 100%; height: 40px; background-color: #fff; border-radius: 20px 20px 0 0; z-index: 2; }
+        .drip { position: absolute; top: 20px; background-color: #fff; width: 30px; height: 40px; border-radius: 0 0 20px 20px; }
+        .drip:nth-child(1) { left: 10px; height: 50px; } .drip:nth-child(2) { left: 50px; height: 35px; } .drip:nth-child(3) { left: 90px; height: 55px; } .drip:nth-child(4) { left: 130px; height: 40px; } .drip:nth-child(5) { left: 170px; height: 50px; } .drip:nth-child(6) { left: 210px; height: 35px; }
+        .candle { background-color: #7B020B; width: 16px; height: 80px; border-radius: 8px / 4px; position: absolute; top: -60px; left: 50%; margin-left: -8px; z-index: 10; }
+        .candle:before { content: ""; position: absolute; top: 0; left: 0; width: 16px; height: 8px; border-radius: 50%; background-color: #ad030f; }
+        .flame { position: absolute; background-color: orange; width: 15px; height: 35px; border-radius: 10px 10px 4px 4px; top: -100px; left: 50%; margin-left: -7.5px; z-index: 20; box-shadow: 0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.5), 0 0 60px rgba(255, 165, 0, 0.5), 0 0 80px rgba(255, 165, 0, 0.5); transform-origin: 50% 90%; cursor: pointer; transition: all 0.3s; }
+        .flame.lit { animation: flicker 0.1s ease-in-out infinite alternate; }
+        .flame.out { background-color: transparent; box-shadow: none; height: 0; }
+        .smoke { position: absolute; width: 2px; height: 40px; background: rgba(0,0,0,0.1); top: -100px; left: 50%; opacity: 0; border-radius: 100%; }
+        .smoke.active { animation: smoke 2s ease-out forwards; }
+        @keyframes smoke { 0% { opacity: 0; height: 0; top: -80px; } 30% { opacity: 0.8; height: 40px; } 100% { opacity: 0; height: 80px; top: -140px; transform: translateX(10px); } }
+
+        /* Carousel Styles */
+        .carousel-container { perspective: 1000px; overflow: hidden; }
+        .carousel-track { display: flex; transition: transform 0.5s ease-in-out; }
+        .carousel-item { min-width: 100%; padding: 1rem; box-sizing: border-box; }
+
+        /* Polaroid Photo Style */
+        .polaroid { background: white; padding: 10px 10px 30px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: rotate(-2deg); transition: transform 0.3s; }
+        .polaroid:hover { transform: rotate(0deg) scale(1.05); z-index: 10; }
+        .polaroid:nth-child(even) { transform: rotate(2deg); }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <!-- AUDIO ELEMENT (Hidden) -->
+    <!-- Musik akan diputar setelah login berhasil karena kebijakan browser -->
+    <audio id="bg-music" loop hidden></audio>
+
+    <!-- MUSIC CONTROL BUTTON (Fixed Bottom Right) -->
+    <button id="music-btn" onclick="toggleMusic()" class="hidden fixed bottom-6 right-6 z-50 bg-white text-pink-500 p-4 rounded-full shadow-xl border-2 border-pink-200 hover:bg-pink-50 transition transform active:scale-95 animate-bounce">
+        <i class="fas fa-music text-xl"></i>
+    </button>
+
+    <!-- LOGIN SECTION -->
+    <section id="login-section" class="fixed inset-0 z-50 flex items-center justify-center bg-pink-50 transition-all duration-700">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-sm w-full border-4 border-pink-200">
+            <div class="mb-4 text-5xl animate-bounce">🔒</div>
+            <h2 class="text-3xl font-cute font-bold text-pink-500 mb-2">Login Dulu Ya!</h2>
+            <p class="text-gray-500 mb-6 text-sm">Masukkan nama kamu kata sandi rahasia untuk membuka pesan</p>
+            
+            <input type="password" id="password-input" 
+                class="w-full px-4 py-3 rounded-full border-2 border-pink-200 focus:outline-none focus:border-pink-400 text-center mb-4 transition-colors" 
+                placeholder="Kata Sandi...">
+            
+            <button onclick="checkPassword()" 
+                class="w-full bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 rounded-full transition-transform active:scale-95 shadow-lg">
+                Masuk ❤️
+            </button>
+            <p id="error-msg" class="text-red-400 text-xs mt-3 hidden">sandi salah! Coba lagi dong,kata sandinya "aulia" 😆:(</p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT (Hidden by default) -->
+    <main id="main-content" class="hidden min-h-screen pb-20">
+        
+        <!-- HEADER / HERO -->
+        <header class="text-center pt-10 pb-5 px-4 relative overflow-hidden">
+            <h1 class="font-script text-4xl md:text-6xl text-pink-500 mb-2 animate-wiggle">Happy 15th Birthday!</h1>
+            <h2 class="font-cute text-2xl text-purple-500">Aulia sayang</h2>
+            <p class="text-sm text-gray-400 mt-2"><i class="far fa-calendar-alt mr-2"></i>17 Januari 2026</p>
+            
+            <!-- Foto Utama (Variable) -->
+            <div class="mt-8 flex justify-center relative z-10">
+                <div class="relative w-48 h-48 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-white shadow-xl animate-float">
+                    <!-- Ganti src ini lewat JS atau manual -->
+                    <img id="main-photo" src="" alt="Foto Aulia" class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <!-- Background decoration -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-20">
+                <i class="fas fa-heart text-pink-300 absolute top-10 left-10 text-4xl animate-pulse"></i>
+                <i class="fas fa-star text-yellow-300 absolute top-20 right-20 text-3xl animate-spin-slow"></i>
+                <i class="fas fa-gift text-purple-300 absolute bottom-10 left-1/4 text-5xl animate-bounce"></i>
+            </div>
+        </header>
+
+        <!-- CANDLE BLOWING SECTION -->
+        <section class="py-10 flex flex-col items-center justify-center bg-white/60 backdrop-blur-sm mx-4 rounded-3xl shadow-sm my-6 border-2 border-pink-50">
+            <h3 class="text-xl font-bold text-pink-400 mb-20 text-center">Make a Wish & Blow the Candle!</h3>
+            
+            <div class="cake">
+                <div class="plate"></div>
+                <div class="cake-body">
+                    <div class="frosting">
+                        <div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div>
+                    </div>
+                </div>
+                <div class="candle"></div>
+                <div id="flame" class="flame lit" onclick="blowCandle()"></div>
+                <div id="smoke" class="smoke"></div>
+            </div>
+
+            <div class="mt-16 text-center">
+                <button id="blow-btn" onclick="blowCandle()" class="bg-gradient-to-r from-yellow-300 to-orange-300 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105">
+                    <i class="fas fa-wind mr-2"></i> Tiup Lilin
+                </button>
+                <p id="wish-text" class="text-lg font-cute text-pink-500 mt-6 hidden">✨ Yey! Barakallah Fii Umrik, Aulia! ✨</p>
+            </div>
+        </section>
+
+        <!-- SLIDER UCAPAN (10 SLIDES) -->
+        <section class="max-w-2xl mx-auto my-10 px-4">
+            <div class="bg-white rounded-3xl shadow-xl p-2 relative border-4 border-pink-100">
+                <div class="absolute -top-4 -left-4 text-4xl">🎀</div>
+                <div class="absolute -bottom-4 -right-4 text-4xl">🧸</div>
+
+                <div class="carousel-container rounded-2xl bg-pink-50">
+                    <div class="carousel-track" id="wishes-track">
+                        <!-- Slides will be injected by JS -->
+                    </div>
+                </div>
+
+                <button onclick="prevSlide()" class="absolute top-1/2 -left-3 md:-left-5 transform -translate-y-1/2 bg-white text-pink-500 rounded-full p-3 shadow-lg hover:bg-pink-100 transition z-10">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button onclick="nextSlide()" class="absolute top-1/2 -right-3 md:-right-5 transform -translate-y-1/2 bg-white text-pink-500 rounded-full p-3 shadow-lg hover:bg-pink-100 transition z-10">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <div class="text-center mt-4 mb-2 font-cute text-pink-400 text-sm">
+                    Geser untuk membaca <span id="slide-indicator">1/10</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY SECTION (20 PHOTOS) -->
+        <section class="px-4 py-10 bg-gradient-to-b from-transparent to-pink-200 rounded-t-[3rem] mt-10">
+            <h2 class="text-center font-script text-4xl text-pink-600 mb-2">Galeri Kenangan</h2>
+            <p class="text-center text-gray-500 mb-8 font-cute">20 Momen Indah Bersamamu</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto p-4" id="gallery-grid">
+                <!-- Gallery items injected by JS -->
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-8 text-gray-500 text-sm font-cute">
+            <p>Dibuat dengan 💖 Spesial untuk Umi Aulia Farida</p>
+            <p>17 Januari 2026</p>
+        </footer>
+
+    </main>
+
+    <script>
+        
+        // =========================================
+        // --- AREA KONFIGURASI DATA (WAJIB DIISI) ---
+        // =========================================
+        
+        // 1. Password Login
+        const PASSWORD_RAHASIA = "aulia";
+
+        // 2. Link Musik Latar (PENTING!)
+        // GANTI link di bawah dengan DIRECT LINK file MP3 kamu.
+        // Link google share yang kamu berikan TIDAK BISA dipakai langsung.
+        // Ini adalah contoh link musik (bisa dipakai untuk tes):
+        const MUSIC_URL = "sound.mp3"; 
+
+        // 3. Foto Utama (Profil di atas)
+        // Ganti dengan URL foto asli Aulia.
+        const MAIN_PHOTO_URL = ""; 
+
+        // 4. Koleksi 20 Foto Kenangan
+        // Ganti daftar ini dengan 20 link fotomu sendiri.
+
+// 4. Koleksi 20 Foto Kenangan
+const galleryPhotos = [
+    "foto1.jpg", 
+    "foto2.jpg", 
+    "foto3.jpeg",
+    "foto4.jpg",
+    "foto5.jpeg",
+    "foto6.jpeg",
+    "foto7.jpg",
+    "foto8.jpeg",
+    "foto9.jpg",
+    "foto10.jpg",
+    "foto11.jpg",
+    "foto12.jpg",
+    "foto13.jpg",
+    "foto14.jpg",
+    "foto15.jpg",
+    "foto16.jpg",
+    "foto17.jpeg",
+    "foto18.jpg",
+    "foto19.jpg",
+    "foto20.jpg"
+];
+
+        // 5. Data Ucapan & Doa (10 Slide)
+        const wishes = [
+            { title: "Barakallah Fii Umrik! 🎂", text: "Selamat ulang tahun yang ke-15, Umi Aulia Farida! Semoga keberkahan selalu menyertai setiap langkahmu di usia yang baru ini." },
+            { title: "Semoga Panjang Umur ✨", text: "Ya Allah, panjangkanlah umurnya dalam ketaatan kepada-Mu, sehatkanlah badannya, dan tetapkanlah imannya." },
+            { title: "Jadi Anak Sholehah 🧕", text: "Semoga Aulia menjadi wanita yang sholehah, berbakti kepada orang tua, dan menjadi kebanggaan keluarga." },
+            { title: "Sukses Pendidikannnya 📚", text: "Di usia 15 tahun ini, semoga Allah mudahkan segala urusan belajarmu. Raih cita-citamu setinggi langit!" },
+            { title: "Selalu Bahagia 😊", text: "Jangan pernah lupa untuk tersenyum. Semoga hari-harimu selalu dipenuhi canda tawa dan kebahagiaan yang tak henti." },
+            { title: "Dijaga Allah SWT 🤲", text: "Semoga Allah senantiasa melindungimu dari segala keburukan dan mendekatkanmu pada segala kebaikan." },
+            { title: "Rezeki yang Berkah 💎", text: "Semoga diluaskan pintu rezekinya, baik rezeki materi, kesehatan, maupun sahabat-sahabat yang baik." },
+            { title: "Tetap Rendah Hati 🌸", text: "Semakin bertambah usia, semoga semakin bijaksana, rendah hati, dan menyayangi sesama." },
+            { title: "Cita-cita Tercapai 🚀", text: "Apapun impian Aulia di tahun 2026 ini dan seterusnya, semoga Allah ridhoi dan kabulkan. Aamiin." },
+            { title: "We Love You! ❤️", text: "Terakhir, ingatlah bahwa banyak orang yang menyayangimu. Selamat ulang tahun Umi Aulia Farida!" }
+        ];
+
+        // =========================================
+        // --- LOGIC APLIKASI (JANGAN DIUBAH) ---
+        // =========================================
+
+        // Setup Awal
+        document.getElementById('main-photo').src = MAIN_PHOTO_URL;
+        const audioPlayer = document.getElementById('bg-music');
+        audioPlayer.src = MUSIC_URL;
+        const musicBtn = document.getElementById('music-btn');
+        let isMusicPlaying = false;
+
+        // Fungsi Kontrol Musik
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                audioPlayer.pause();
+                musicBtn.innerHTML = '<i class="fas fa-music text-xl"></i>';
+                musicBtn.classList.add('animate-bounce');
+            } else {
+                // Browser butuh interaksi user dulu sebelum bisa play audio
+                audioPlayer.play().then(() => {
+                    musicBtn.innerHTML = '<i class="fas fa-pause text-xl"></i>';
+                    musicBtn.classList.remove('animate-bounce');
+                }).catch(error => {
+                    console.log("Autoplay dicegah browser, perlu klik manual:", error);
+                });
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Login Logic
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('error-msg');
+            const loginSection = document.getElementById('login-section');
+            const mainContent = document.getElementById('main-content');
+
+            if (input.toLowerCase() === PASSWORD_RAHASIA) {
+                // Success Login
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#FF69B4', '#FFD1DC', '#E6E6FA'] });
+                
+                loginSection.style.opacity = '0';
+                setTimeout(() => {
+                    loginSection.style.display = 'none';
+                    mainContent.classList.remove('hidden');
+                    musicBtn.classList.remove('hidden'); // Tampilkan tombol musik
+                    
+                    // Coba putar musik otomatis setelah login (karena sudah ada interaksi klik)
+                    toggleMusic();
+
+                    // Animasi masuk konten utama
+                    mainContent.style.opacity = '0';
+                    setTimeout(() => {
+                        mainContent.style.transition = 'opacity 1s';
+                        mainContent.style.opacity = '1';
+                    }, 50);
+                }, 700);
+            } else {
+                // Error Login
+                errorMsg.classList.remove('hidden');
+                document.getElementById('password-input').classList.add('border-red-400');
+                setTimeout(() => {
+                    document.getElementById('password-input').classList.remove('border-red-400');
+                }, 500);
+            }
+        }
+
+        // Candle Logic
+        let isCandleLit = true;
+        function blowCandle() {
+            if (!isCandleLit) return;
+            document.getElementById('flame').classList.replace('lit', 'out');
+            document.getElementById('smoke').classList.add('active');
+            isCandleLit = false;
+
+            // Update UI
+            const btn = document.getElementById('blow-btn');
+            btn.innerHTML = '<i class="fas fa-check mr-2"></i> Lilin Mati!';
+            btn.classList.replace('from-yellow-300', 'from-green-400');
+            btn.classList.replace('to-orange-300', 'to-teal-400');
+            document.getElementById('wish-text').classList.remove('hidden');
+            document.getElementById('wish-text').classList.add('animate-bounce');
+
+            // Celebration Confetti Loop
+            var duration = 3000; var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#FF69B4', '#FFD1DC'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#E6E6FA', '#FDFD96'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        // Carousel/Slider Logic
+        const track = document.getElementById('wishes-track');
+        let currentSlide = 0;
+
+        wishes.forEach((wish) => {
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'carousel-item flex flex-col items-center justify-center text-center p-4 md:p-8';
+            slideDiv.innerHTML = `
+                <div class="bg-white/90 backdrop-blur p-6 rounded-2xl shadow-sm border-2 border-pink-100 w-full h-72 flex flex-col justify-center items-center">
+                    <h3 class="text-2xl font-bold text-pink-500 mb-4 font-script">${wish.title}</h3>
+                    <p class="text-gray-600 font-cute text-lg leading-relaxed">${wish.text}</p>
+                </div>
+            `;
+            track.appendChild(slideDiv);
+        });
+
+        function updateSlide() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.getElementById('slide-indicator').innerText = `${currentSlide + 1}/${wishes.length}`;
+        }
+        function nextSlide() { currentSlide = (currentSlide < wishes.length - 1) ? currentSlide + 1 : 0; updateSlide(); }
+        function prevSlide() { currentSlide = (currentSlide > 0) ? currentSlide - 1 : wishes.length - 1; updateSlide(); }
+
+        // Gallery Rendering
+         
+        const galleryGrid = document.getElementById('gallery-grid');
+        galleryPhotos.slice(0, 20).forEach((src, index) => {
+            const photoDiv = document.createElement('div');
+            photoDiv.className = 'polaroid';
+            photoDiv.style.transform = `rotate(${Math.floor(Math.random() * 6) - 3}deg)`;
+            photoDiv.innerHTML = `
+                <div class="aspect-square overflow-hidden bg-pink-100 mb-2 rounded-sm">
+                    <img src="${src}" alt="Kenangan ${index+1}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" loading="lazy">
+                </div>
+                <div class="text-center font-handwriting text-gray-400 text-xs font-cute">Momen${index + 1}</div>
+            `;
+            galleryGrid.appendChild(photoDiv);
+        });
+    </script>
+</body>
+</html>
+
